@@ -1,0 +1,4 @@
+<!--type navbar in searchbox of bootstrap and get code and modify as per requirement(above color schemes stuff in bootstrap)-->
+<!--get the following code from grid under layout section in bootstrap-->
+<!--get the following card code from bootstrap(type cards, above image stuff copy the code)-->
+<!--type navbar in searchbox of bootstrap and get code and modify as per requirement(above color schemes stuff in bootstrap)-->
