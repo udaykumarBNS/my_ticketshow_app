@@ -1,8 +1,7 @@
 #Data models
-
 from flask_sqlalchemy import SQLAlchemy
-
 db=SQLAlchemy()
+
 
 #First entity
 class User_Info(db.Model):
@@ -14,40 +13,54 @@ class User_Info(db.Model):
     full_name=db.Column(db.String,nullable=False)
     address=db.Column(db.String,nullable=False)
     pin_code=db.Column(db.Integer,nullable=False)
-    tickets=db.relationship("Ticket",cascade="all,delete",backref="user_info",lazy=True) #User can access all of his tickets
-
-    
-#Entity2 Theatre
-class Theatre(db.Model):
-    __tablename__="theatre"
-    id=db.Column(db.Integer,primary_key=True)
-    name=db.Column(db.String,nullable=False)
-    location=db.Column(db.String,nullable=False)
-    pin_code=db.Column(db.Integer,nullable=False)
-    capacity=db.Column(db.Integer,nullable=False)
-    venue_pic_url=db.Column(db.String,nullable=True,default="None")
-    shows=db.relationship("Show",cascade="all,delete",backref="theatre",lazy=True) #Theatre can access all of its shows
-
-#Entity3 show table
-class Show(db.Model):
-    __tablename__="show"
-    id=db.Column(db.Integer,primary_key=True)
-    name=db.Column(db.String,nullable=False)
-    tags=db.Column(db.String,nullable=False)
-    rating=db.Column(db.Integer,default=0)
-    tkt_price=db.Column(db.Float,default=0.0)
-    date_time=db.Column(db.DateTime,nullable=False)
-    theatre_id=db.Column(db.Integer, db.ForeignKey("theatre.id"),nullable=False)
-    tickets=db.relationship("Ticket",cascade="all,delete",backref="show",lazy=True) #Show can access its tickets
-  
+    scores = db.relationship("Score", cascade="all,delete", backref="user", lazy=True)
 
 
-#Entity4 Ticket
-class Ticket(db.Model):
-    __tablename__="ticket"
-    id=db.Column(db.Integer,primary_key=True)
-    no_of_tickets=db.Column(db.Integer,nullable=False)
-    sl_nos=db.Column(db.String,nullable=False)
-    user_rating=db.Column(db.Integer,default=0)
-    user_id=db.Column(db.Integer, db.ForeignKey("user_info.id"),nullable=False)
-    show_id=db.Column(db.Integer, db.ForeignKey("show.id"),nullable=False)
+# Subject model
+class Subject(db.Model):
+    __tablename__ = "subject"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    description = db.Column(db.String, nullable=True)
+    chapters = db.relationship("Chapter", cascade="all,delete", backref="subject", lazy=True)
+
+# Chapter model
+class Chapter(db.Model):
+    __tablename__ = "chapter"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    description = db.Column(db.String, nullable=True)
+    subject_id = db.Column(db.Integer, db.ForeignKey("subject.id"), nullable=False)
+    quizzes = db.relationship("Quiz", cascade="all,delete", backref="chapter", lazy=True)
+
+# Quiz model
+class Quiz(db.Model):
+    __tablename__ = "quiz"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    date_of_quiz = db.Column(db.String, nullable=False)
+    time_duration = db.Column(db.String, nullable=False)
+    chapter_id = db.Column(db.Integer, db.ForeignKey("chapter.id"), nullable=False)
+    questions = db.relationship("Question", cascade="all,delete", backref="quiz", lazy=True)
+    scores = db.relationship("Score", cascade="all,delete", backref="quiz", lazy=True)
+
+# Question model
+class Question(db.Model):
+    __tablename__ = "question"
+    id = db.Column(db.Integer, primary_key=True)
+    question_statement = db.Column(db.String, nullable=False)
+    option1 = db.Column(db.String, nullable=False)
+    option2 = db.Column(db.String, nullable=False)
+    option3 = db.Column(db.String, nullable=False)
+    option4 = db.Column(db.String, nullable=False)
+    correct_option = db.Column(db.String, nullable=False)
+    quiz_id = db.Column(db.Integer, db.ForeignKey("quiz.id"), nullable=False)
+
+# Score model
+class Score(db.Model):
+    __tablename__ = "score"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user_info.id"), nullable=False)
+    quiz_id = db.Column(db.Integer, db.ForeignKey("quiz.id"), nullable=False)
+    total_scored = db.Column(db.Integer, nullable=False)
+    time_stamp_of_attempt = db.Column(db.String, nullable=False)

@@ -1,26 +1,22 @@
-#Starting of the app
+# Starting of the app
 from flask import Flask
 from backend.models import db
-from backend.api_controllers import *
 
-
-app=None
+app = None
 
 def setup_app():
-    app=Flask(__name__)
-    app.config["SQLALCHEMY_DATABASE_URI"]="sqlite:///ticket_show.sqlite3" #Having db file
-    db.init_app(app) #Flask app connected to db(SQL alchemy)
-    api.init_app(app) #Flask app connect to apis
-    app.app_context().push() #Direct access to other modules
-    app.debug=True
+    global app
+    app = Flask(__name__)
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///quiz_show.sqlite3" # Having db file
+    db.init_app(app) # Flask app connected to db (SQLAlchemy)
+    app.app_context().push() # Direct access to other modules
+    app.debug = True
     print("Ticket Show app is started...")
 
-
-
-#Call the setup
+# Call the setup
 setup_app()
 
 from backend.controllers import *
 
-if __name__=="__main__":
+if __name__ == "__main__":
     app.run()

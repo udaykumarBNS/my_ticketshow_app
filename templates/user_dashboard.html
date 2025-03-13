@@ -1,32 +1,33 @@
-{%extends "user_layout.html"%} <!--Inherited all nav features-->
-{%block content%}
-    {%if theatres%}
-          {%for theatre in theatres%}
-                {%if theatre.shows%}
-                <div class="outer_box">
-                    {{theatre.name}}
-                  <div class="container">
-                    <div class="row">
-                      {%for show in theatre.shows%}
-                      {%if show.date_time >= dt_time_now%}
-                        <div class="col">
-                            <div class="card" style="width: 18rem;">
+{% extends "user_layout.html" %}
+{% block content %}
+    <div class="container">
+        <h3 class="center">Available Quizzes</h3>
+        {% if subjects %}
+            <div class="row">
+                {% for subject in subjects %}
+                    <div class="col-md-4">
+                        <div class="card">
                             <div class="card-body">
-                              <h5 class="card-title">{{show.name}}</h5>
-                              <h6 class="card-subtitle mb-2 text-muted">{{show.tags}}, Show time: {{show.date_time}}</h6>
-                              <a href="/book_ticket/{{uid}}/{{show.id}}/{{name}}" type="button" class="btn btn-outline-primary">Book</a>
+                                <h5 class="card-title">{{ subject.name }}</h5>
+                                {% for chapter in subject.chapters %}
+                                    <h6>{{ chapter.name }}</h6>
+                                    {% for quiz in chapter.quizzes %}
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <h6 class="card-title">{{ quiz.name }}</h6>
+                                                <p class="card-text">Date: {{ quiz.date_of_quiz }} | Duration: {{ quiz.time_duration }}</p>
+                                                <a href="/quiz/{{quiz.id}}/{{id}}" class="btn btn-primary">Attempt Quiz</a>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% endfor %}
                             </div>
-                          </div>
                         </div>
-                        {%endif%}
-                      {%endfor%}                      
-                  </div>
-                </div>
-              </div>
-              {%endif%}
-              {%endfor%}
-      {%else%}
-              <h3 class="center">Sorry, no theatres available!!</h3>
-      {%endif%}
-{%endblock%}
-
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <h4 class="center">No quizzes available.</h4>
+        {% endif %}
+    </div>
+{% endblock %}

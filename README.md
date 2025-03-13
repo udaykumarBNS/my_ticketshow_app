@@ -1,4 +1,5 @@
-# my_ticketshow_app
-# steps for setup git
-1) create git account, create repo, clone it to local device.
-2) use vscode to start implementation
+It's multi user application that acts as quiz preparation application for students.
+There is only one admin and many users.
+
+Just install flask,flask - sqlalchemy, matplotlib, sqlite3editor
+and run the app.
